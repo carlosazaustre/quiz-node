@@ -42,6 +42,36 @@ exports.show = function (req, res) {
   res.render('quizes/show', { quiz: req.quiz, errors: [] });
 }
 
+// GET /quizes/:id/edit
+exports.edit = function (req, res) {
+  res.render('quizes/edit', { quiz: req.quiz, errors: [] });
+}
+
+// PUT /quizes/:id
+exports.update = function (req, res) {
+  req.quiz.pregunta = req.body.quiz.pregunta;
+  req.quiz.respuesta = req.body.quiz.respuesta;
+
+  var validateErrors = req.quiz.validate();
+  if (validateErrors) {
+    var i = 0;
+    var errors = [];
+
+    for (var prop in validateErrors) {
+      errors[i++] = { message: validateErrors[prop] };
+    }
+    return res.render('quizes/new', { quiz: quiz, errors: errors });
+  }
+
+  req.quiz
+    .save({
+      fields: ["pregunta", "respuesta"]
+    })
+    .then(function() {
+      res.redirect('/quizes');
+    });
+}
+
 // GET /quizes/:id/answer
 exports.answer = function (req, res) {
   var resultado = 'Incorrecto';
