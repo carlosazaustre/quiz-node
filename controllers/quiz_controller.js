@@ -72,44 +72,22 @@ exports.new = function (req, res) {
 exports.create = function (req, res, next) {
   var quiz = models.Quiz.build( req.body.quiz );
 
-  var errors = quiz.validate();
-  if (errors) {
+  var validateErrors = quiz.validate();
+  if (validateErrors) {
     var i = 0;
-    var errores = [];
-    for (var prop in errors) {
-      errores[i++] = { message: errors[prop] };
+    var errors = [];
+
+    for (var prop in validateErrors) {
+      errors[i++] = { message: validateErrors[prop] };
     }
-    res.render('quizes/new', { quiz: quiz, errors: errores });
-  }
-  else {
-    quiz
-      .save({
-        fields: ["pregunta", "respuesta"]
-      })
-      .then(function () {
-        res.redirect('/quizes/');
-      });
+    return res.render('quizes/new', { quiz: quiz, errors: errors });
   }
 
-  // Guarda en DB los campos "pregunta" y "respuesta" de quiz
-  /*quiz
-    .save()
-    .then(function(err) {
-      if (err) {
-        console.log('hay error');
-        res.render('quizes/new', { quiz: quiz, errors: err.errors });
-      }
-      else {
-        quiz
-          .save({
-            fields: ["pregunta", "respuesta"]
-          })
-          .then(function () {
-            res.redirect('/quizes');
-          })
-      }
+  quiz
+    .save({
+      fields: ["pregunta", "respuesta"]
     })
-    .catch(function (err) {
-      next(err);
-    });*/
+    .then(function () {
+      res.redirect('/quizes/');
+    });
 }
