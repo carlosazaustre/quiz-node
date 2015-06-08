@@ -30,7 +30,7 @@ exports.index = function (req, res, next) {
       where: ["lower(pregunta) like ?", searchName.toLowerCase()]
     })
     .then(function (quizes) {
-      res.render('quizes/index', { quizes: quizes });
+      res.render('quizes/index', { quizes: quizes, errors: [] });
     })
     .catch(function (error) {
       next(error);
@@ -39,7 +39,7 @@ exports.index = function (req, res, next) {
 
 // GET /quizes/:id
 exports.show = function (req, res) {
-  res.render('quizes/show', { quiz: req.quiz });
+  res.render('quizes/show', { quiz: req.quiz, errors: [] });
 }
 
 // GET /quizes/:id/answer
@@ -51,8 +51,9 @@ exports.answer = function (req, res) {
   }
 
   res.render('quizes/answer', {
-    quiz: req.quiz,
-    respuesta: resultado
+    quiz      : req.quiz,
+    respuesta : resultado,
+    errors    : []
   });
 
 }
@@ -64,19 +65,51 @@ exports.new = function (req, res) {
     respuesta : "Respuesta"
   });
 
-  res.render('quizes/new', { quiz: quiz });
+  res.render('quizes/new', { quiz: quiz, errors: [] });
 }
 
 // POST /quizes/create
-exports.create = function (req, res) {
+exports.create = function (req, res, next) {
   var quiz = models.Quiz.build( req.body.quiz );
 
+  var errors = quiz.validate();
+  if (errors) {
+    var i = 0;
+    var errores = [];
+    for (var prop in errors) {
+      errores[i++] = { message: errors[prop] };
+    }
+    res.render('quizes/new', { quiz: quiz, errors: errores });
+  }
+  else {
+    quiz
+      .save({
+        fields: ["pregunta", "respuesta"]
+      })
+      .then(function () {
+        res.redirect('/quizes/');
+      });
+  }
+
   // Guarda en DB los campos "pregunta" y "respuesta" de quiz
-  quiz
-    .save({
-      fields: ["pregunta", "respuesta"]
+  /*quiz
+    .save()
+    .then(function(err) {
+      if (err) {
+        console.log('hay error');
+        res.render('quizes/new', { quiz: quiz, errors: err.errors });
+      }
+      else {
+        quiz
+          .save({
+            fields: ["pregunta", "respuesta"]
+          })
+          .then(function () {
+            res.redirect('/quizes');
+          })
+      }
     })
-    .then(function () {
-      res.redirect('/quizes');
-    })
+    .catch(function (err) {
+      next(err);
+    });*/
 }

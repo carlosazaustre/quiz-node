@@ -3,9 +3,15 @@
 module.exports = function (sequelize, DataTypes) {
 
   var quizModel = {
-    pregunta  : DataTypes.STRING,
-    respuesta : DataTypes.STRING
-  }
+    pregunta  : {
+      type: DataTypes.STRING,
+      validate: { notEmpty: { msg: "-> Falta Pregunta" }}
+    },
+    respuesta : {
+      type: DataTypes.STRING,
+      validate: { notEmpty: { msg: "-> Falta Respuesta" }}
+    }
+  };
 
-  return sequelize.define('Quiz', quizModel); 
+  return sequelize.define('Quiz', quizModel);
 }
