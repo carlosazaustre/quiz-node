@@ -19,9 +19,8 @@ exports.load = function (req, res, next, quizId) {
 
 // GET /quizes
 exports.index = function (req, res, next) {
-  console.log(req.query.search);
   var searchName = req.query.search || "";
-  searchName.split(" ").join("%");
+  searchName = searchName.split(" ").join("%");
   searchName = "%" + searchName + "%";
 
   console.log(searchName);
