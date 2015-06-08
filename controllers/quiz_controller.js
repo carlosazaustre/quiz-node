@@ -65,7 +65,7 @@ exports.update = function (req, res) {
 
   req.quiz
     .save({
-      fields: ["pregunta", "respuesta"]
+      fields: ["pregunta", "respuesta", "tema"]
     })
     .then(function() {
       res.redirect('/quizes');
@@ -104,7 +104,8 @@ exports.answer = function (req, res) {
 exports.new = function (req, res) {
   var quiz = models.Quiz.build({
     pregunta  : "Pregunta",
-    respuesta : "Respuesta"
+    respuesta : "Respuesta",
+    tema      : "otro"
   });
 
   res.render('quizes/new', { quiz: quiz, errors: [] });
@@ -127,7 +128,7 @@ exports.create = function (req, res, next) {
 
   quiz
     .save({
-      fields: ["pregunta", "respuesta"]
+      fields: ["pregunta", "respuesta", "tema"]
     })
     .then(function () {
       res.redirect('/quizes/');
