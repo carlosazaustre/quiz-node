@@ -29,11 +29,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Helpers dinámicos
 app.use(function (req, res, next) {
   // Guarda el path en la session para redirigir tras el login
-  if(!req.path.match(/\/login|\/logout/)) {
+  if (!req.path.match(/\/login|\/logout/)) {
     req.session.redir = req.path;
   }
   // Hace visible la session en las vistas
-  req.locals.session = req.session;
+  res.locals.session = req.session;
 
   next();
 });
