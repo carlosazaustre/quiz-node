@@ -26,6 +26,18 @@ app.use(session());
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Helpers dinámicos
+app.use(function (req, res, next) {
+  // Guarda el path en la session para redirigir tras el login
+  if(!req.path.match(/\/login|\/logout/)) {
+    req.session.redir = req.path;
+  }
+  // Hace visible la session en las vistas
+  req.locals.session = req.session;
+
+  next();
+});
+
 app.use('/', routes);
 
 // catch 404 and forward to error handler
