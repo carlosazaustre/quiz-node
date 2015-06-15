@@ -1,0 +1,2 @@
+Heroku: https://quiz-carlosazaustre.herokuapp.com/quizes
+GitHub: https://github.com/carlosazaustre/quiz-node
