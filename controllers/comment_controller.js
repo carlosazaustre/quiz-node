@@ -9,8 +9,9 @@ exports.new = function (req, res) {
 };
 
 exports.create = function (req, res) {
+
   var comment = models.Comment.build({
-    texto : req.body.texto,
+    texto : req.body.comment.texto,
     QuizId: req.params.quizId
   });
 
@@ -25,7 +26,7 @@ exports.create = function (req, res) {
     return res.render('comments/new.ejs', {
       comment : comment,
       quizid  : req.params.quizId,
-      errors  : err.errors
+      errors  : errors
     });
   }
 

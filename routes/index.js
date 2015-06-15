@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var quizController = require('../controllers/quiz_controller');
+var commentController = require('../controllers/comment_controller');
 
 // GET home page
 router.get('/', function(req, res) {
@@ -26,7 +27,7 @@ router.post('/quizes/:quizId(\\d+)/comments',     commentController.create);
 
 // GET authors
 router.get('/author', function(req, res) {
-  res.render('author');
+  res.render('author', { errors: "" });
 });
 
 module.exports = router;
