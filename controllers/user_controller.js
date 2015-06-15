@@ -17,12 +17,10 @@ exports.autenticar = function (login, password, callback) {
   if (users[login]) {
     if(password === users[login].password) {
       callback(null, users[login]);
-    }
-    else {
+    } else {
       callback(new Error('password erróneo'));
     }
-  }
-  else {
+  } else {
     callback(new Error('No existe el usuario'));
   }
 };
